@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio2DWEC03</title>
+</head>
+<!--2. Vamos utilizar nuestros conocimientos de manipulación de cadenas en javascript, para crear un algoritmo de compresión de cadenas. El algoritmo consiste en sustituir rachas de caracteres repetidos 
+por el número de repeticiones seguido del carácter. El algoritmo sólo actúa con cadenas de caracteres del alfabeto, por lo que arrojará un mensaje de error en caso de que la cadena contenga números. 
+Si admite espacios, en cuyo caso se sustituirá el espacio por una interrogación "?".
+
+Ejemplos de prueba:
+
+Cadena de entrada: "holaaaa mundo" se transforma en "hol4a? mundo"
+
+Cadena de entrada: "aaabbcaaaa" se transforma en "3a2bc4a"
+
+ a). Crea una función de compresión que recibe la cadena y devuelve la cadena comprimida.
+
+ b). Crea una función de descompresión que recibe una cadena en formato comprimido y devuelve la cadena original.
+
+ Implementa una interfaz con dos botones que permita codificar y decodificar cadenas introducidas por el usuario.
+-->
+<body>
+
+    
+    <!--Añadimos el titulo del ejercicio en un h2:-->
+    <h2>Compresión y Descompresión de cadenas DWEC03</h2>
+    <!--Añadimos la caja de texto para introducir la cadena con el texto para que el usuario sepa lo que debe escribir:-->
+    <p>
+        <input type="text" id="cadenaInput" placeholder="Escribe una cadena sin números">
+    </p>
+    <!--Añadimos dos botones, uno para comprimir con su respectiva función asociada y otro para descomprimir de la misma manera:-->
+    <button onclick="comprimir()">Comprimir</button>
+    <button onclick="descomprimir()">Descomprimir</button>
+    
+    <div class="resultado" id="resultado"></div>
+        <script>
+            //a)Creamos la fucnión para comprimir la cadena del usuario:
+            function comprimir() {
+                //Obtenemos la cadena del usuario con el id "cadenaInput"
+                var cadena = document.getElementById("cadenaInput").value;
+                //El resultado vacío:
+                var resultado = "";
+                //Creamos la variable del for vacía:
+                var i;
+
+                //En primer lugar comprobamos si hay números en la cadena para lanzar el error si es así:
+                //Recorremos la cadena con la longitud de caracteres que contenga:
+                for (i = 0; i < cadena.length; i++) {
+                    //Comprobamos si cada caracter se encuentra entre el 0 y el 9 para saber si hay un númeor:
+                    if (cadena.charAt(i) >= '0' && cadena.charAt(i) <= '9') {
+                        //Si es así escribimos el error en el html como indica el ejercicio:
+                        document.getElementById("resultado").innerHTML = "ERROR: La cadena no puede contener números.";
+                        return;
+                    }
+                }
+
+                //Al termianr de recorrer la cadena para saber si hay numeros seguimos recorriendo de nuevo para realizar la compresión:
+                for (i = 0; i < cadena.length; i++) {
+                    var char = cadena.charAt(i);
+                    var contador = 1;
+
+                    //Comparamos caracteres para saber si existen caracteres repetidos y los contamos:
+                    while (i + 1 < cadena.length && cadena.charAt(i + 1) == char) {
+                        contador++;
+                        i++;
+                    }
+
+                    //cambiamos los espacios por interrogaciones (?)
+                    if (char == ' ') {
+                        char = '?';
+                    }
+
+                    //Añadimos la cantidad al resultado y el caracter que se repite para que aparezca la cantidad y el caracter consecutivamente:
+                    if (contador > 1) {
+                        resultado = resultado + contador + char;
+                    } else {
+                        resultado = resultado + char;
+                    }
+                }
+
+                document.getElementById("resultado").innerHTML = "Comprimido: " + resultado;
+            }
+
+            //b)Ahora realizamos la función para descomprimir (En este caso si admitiría numeros ya que la cadena comprimida ya viene con numeros):
+            function descomprimir() {
+                //Hacemos lo mismo que en la funcion comprimir(), utilizamos la cadena del usuario:
+                var cadena = document.getElementById("cadenaInput").value;
+                var resultado = "";
+                var i = 0;
+
+
+                while (i < cadena.length) {
+                    //Siempre habrá un caracter en la cadena, no puede tener cero ai que partimos de 1
+                    var num = 1; 
+                    //Empezamos en el caracter 1 y lo alamacenamos en "char" para ir comparandolos con los siguientes:
+                    var char = cadena.charAt(i);
+
+                    //Si el siguiente carácter es un número, lo leemos para saber cuantas veces debe repetirse un caracter:
+                    if (char >= '0' && char <= '9') {
+                        //Convertimos el carácter a número
+                        num = parseInt(char); 
+                        //Si a entrado en este condicional if significa que el siguiente es la letra que hay que repetir:
+                        char = cadena.charAt(i + 1); 
+                        //Avanzamos al siguiente para el while:
+                        i++;
+                    }
+
+                    //Repetimos el carácter todas las veces que indice la variable "num":
+                    for (var j = 0; j < num; j++) {
+                        resultado = resultado + char;
+                    }
+                    //Sumamos al contador para seguir con el siguiente carácter
+                    i++; 
+                }
+
+                //Volver a cambiar ? por espacio, hacemos lo mismo que en la funcion comprimir, pero al revés:
+                var espacio = "";
+                //Recorremos la cadena tantas veces como indica su longitud:
+                for (i = 0; i < resultado.length; i++) {
+                    //Si la interrogación existe, la cambiamos por un espacio:
+                    if (resultado.charAt(i) == '?') {
+                        espacio = espacio + ' ';
+                    } else {
+                        espacio = espacio + resultado.charAt(i);
+                    }
+                }
+                resultado = espacio;
+                //Imprimimos la respuesta:
+                document.getElementById("resultado").innerHTML = "Descomprimido: " + resultado;
+            }
+        </script>
+    
+</body>
+</html>
