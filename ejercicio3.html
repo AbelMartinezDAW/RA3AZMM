@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio2DWEC03</title>
+</head>
+<!--3. Crea una pequeña interfaz con un botón que cada vez que el usuario hace click haya un contador en pantalla
+ con el número de clicks acumulado. 
+
+a) Utiliza la propiedad de window localStorage para almacenar el número de clicks realizados y que cuando vuelva
+ a entrar otra vez en la web posteriormente continúe desde el número en que se quedó.
+
+b) Si utilizamos una variable de tipo number para manipular el contador, llegará un momento en el que alcancemos
+ el mayor entero con el que javascript es capaz de realizar operaciones de forma segura, alcanzado este número ya
+  no aumentará el contador y aparecerá un mensaje de alerta "Ya no se pueden realizar más clicks".
+-->
+<body>
+
+    <h2>Contador de Clicks DWEC03</h2>
+    <p>Clicks: <span id="contador">0</span></p>
+    <button onclick="contar()">Hacer click</button>
+
+    <script>
+        //Miro si ya hay un número guardado en localstorage
+        let clicks = localStorage.getItem("clicks");
+
+        //Si no hay nada guardado, empiezo desde 0:
+        if (clicks == null) {
+            clicks = 0;
+        }
+        //Si hay algo lo convierto a número para que no aparezcan errores:
+        else {
+            clicks = parseInt(clicks);
+        }
+
+        //Muestro el número que haya guardado en clicks en la pantalla
+        document.getElementById("contador").innerHTML = clicks;
+
+        //Creamos la función que se ejecuta al hacer click y va sumando los clicks
+        function contar() {
+            //Si se llega al máximo número posible de clicks se produce un error como indica el enunciado:
+            if (clicks >= 9007199254740991) {
+                alert("Ya no se pueden realizar más clicks");
+                return; //se para aquí la función y termina el programa:
+            }
+
+            //Si no sucede eso, sumo 1 a la variable clicks:
+            clicks = clicks + 1;
+
+            //Guardo el nuevo número en la localstorage
+            localStorage.setItem("clicks", clicks);
+
+            //Y actualizo lo que se ve en la pantalla añadiendo de nuevo la variable clicks actualizada:
+            document.getElementById("contador").innerHTML = clicks;
+        }
+    </script>
+
+</body>
+</html>
